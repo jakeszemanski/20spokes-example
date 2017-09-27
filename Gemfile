@@ -10,6 +10,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'rack-cors', :require => 'rack/cors'
 gem "haml-rails", "~> 0.9"
 gem 'jquery-rails'
+gem 'responders'
 
 gem 'react-rails'
 gem 'bootstrap-sass', '~> 3.3.6'
