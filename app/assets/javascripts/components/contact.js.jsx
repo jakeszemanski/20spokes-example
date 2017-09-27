@@ -31,8 +31,11 @@ var ContactForm = React.createClass({
         }
       },
       success: (response) => {
-        console.log("resetting")
         this._resetAllFields()
+        alert("Success! Contact Created")
+      },
+      error: function (response) {
+        alert(response.responseJSON.errors)
       }
     });    
   },
