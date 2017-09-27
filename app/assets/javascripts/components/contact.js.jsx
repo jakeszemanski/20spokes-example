@@ -16,10 +16,9 @@ var ContactForm = React.createClass({
 
   handleSubmit: function(event){
     event.preventDefault();
-    console.warn('submit has been triggered');
-    this._validateFields()
-
-    $.ajax({
+    console.warn('submit has been triggered', this.state);
+    this._validateFields(function(){
+      $.ajax({
       url: '/contact',
       type: 'POST',
       data: { 
@@ -30,14 +29,16 @@ var ContactForm = React.createClass({
           message: this.state.fields.message.value
         }
       },
-      success: (response) => {
+      success: function (response) {
         this._resetAllFields()
         alert("Success! Contact Created")
-      },
+      }.bind(this),
       error: function (response) {
         alert(response.responseJSON.errors)
       }
-    });    
+    });  
+
+    }.bind(this))      
   },
 
   _resetAllFields: function() {
@@ -63,7 +64,6 @@ var ContactForm = React.createClass({
   },
 
   _onFieldChange: function(key, value) {
-    console.log("thissttae", this.state)
     this.setState({
       fields: {
         ...(this.state.fields),
@@ -91,41 +91,29 @@ var ContactForm = React.createClass({
   },
 
   _renderInputFields: function() {
-
     return (
-      <div className="form-group row">
-        <input
-          className="form-control"
-          ref="firstName"
-          placeholder="First Name"
-          value={this.state.fields.firstName.value}
-          onChange={value => this._onFieldChange('firstName', value.target.value)}/><br />
-        <input
-          className="form-control"
-          ref="lastName"
-          placeholder="Last Name"
-          value={this.state.fields.lastName.value}
-          onChange={value => this._onFieldChange('lastName', value.target.value)}/><br />
-        <input
-          className="form-control"
-          ref="email"
-          placeholder="Email"
-          value={this.state.fields.email.value}
-          onChange={value => this._onFieldChange('email', value.target.value)}/><br />
-        <input
-          className="form-control" 
-          ref="message"
-          placeholder="Message"
-          value={this.state.fields.message.value}
-          onChange={value => this._onFieldChange('message', value.target.value)}/><br />
-      </div>)
+      Object.keys(this.state.fields).map(function(key) {
+        return (
+          <div key={key}>
+            <input
+              className="form-control"
+              placeholder={this.state.fields[key].name}
+              value={this.state.fields[key].value}
+              onChange={value => this._onFieldChange(key, value.target.value)}
+            /><br />
+          </div>
+        )
+      }.bind(this))
+    )
   },
 
   render: function(){
     return (
       <div className="container">
         <div className="col-sm-12">
-        { this._renderInputFields()}
+          <div>
+          { this._renderInputFields()}
+          </div>
           <form onSubmit={this.handleSubmit}>
             <div className="actions">
               <button className="btn btn-primary">Submit</button>
