@@ -8,7 +8,7 @@ class ContactController < ApplicationController
     contact = Contact.new(contact_params)
 
     if contact.save
-      render json: { errors: 'Problems creating a contact'}, status: 422
+      render json: contact, status: 201
     else
       render json: { errors: 'Problems creating a contact'}, status: 422
     end
