@@ -1,14 +1,17 @@
-var ContactForm = React.createClass({ 
-  displayName: "ContactForm",
-  getInitialState: function() {
-    return {
-      fields: {
+const initialState = {
+  fields: {
         firstName: { name: 'First Name', value: '', invalid: false, validators:['_isPresent'] },
         lastName: { name: 'Last Name', value: '', invalid: false, validators:['_isPresent'] },
         email: { name: 'Email', value: '', invalid: false, validators:['_isPresent', '_isEmailValid'] },
         message: { name: 'Message', value: '', invalid: false, validators:['_isPresent'] }    
       }
-    };
+}
+
+var ContactForm = React.createClass({ 
+  displayName: "ContactForm",
+  getInitialState: function() {
+    console.log("initialState", initialState)
+    return initialState
   },
 
   handleSubmit: function(event){
@@ -28,9 +31,15 @@ var ContactForm = React.createClass({
         }
       },
       success: (response) => {
-        console.log('it worked!', response);
+        console.log("resetting")
+        this._resetAllFields()
       }
     });    
+  },
+
+  _resetAllFields: function() {
+    this.setState(initialState)
+    console.log("fields after clear", this.state)
   },
 
   _isPresent: function(value) {
@@ -51,6 +60,7 @@ var ContactForm = React.createClass({
   },
 
   _onFieldChange: function(key, value) {
+    console.log("thissttae", this.state)
     this.setState({
       fields: {
         ...(this.state.fields),
@@ -81,10 +91,30 @@ var ContactForm = React.createClass({
 
     return (
       <div className="form-group row">
-        <input className="form-control" ref="firstName" placeholder="First Name" onChange={value => this._onFieldChange('firstName', value.target.value)}/><br />
-        <input className="form-control" ref="lastName" placeholder="Last Name" onChange={value => this._onFieldChange('lastName', value.target.value)}/><br />
-        <input className="form-control" ref="email" placeholder="Email" onChange={value => this._onFieldChange('email', value.target.value)}/><br />
-        <input className="form-control"  ref="message" placeholder="Message" onChange={value => this._onFieldChange('message', value.target.value)}/><br />
+        <input
+          className="form-control"
+          ref="firstName"
+          placeholder="First Name"
+          value={this.state.fields.firstName.value}
+          onChange={value => this._onFieldChange('firstName', value.target.value)}/><br />
+        <input
+          className="form-control"
+          ref="lastName"
+          placeholder="Last Name"
+          value={this.state.fields.lastName.value}
+          onChange={value => this._onFieldChange('lastName', value.target.value)}/><br />
+        <input
+          className="form-control"
+          ref="email"
+          placeholder="Email"
+          value={this.state.fields.email.value}
+          onChange={value => this._onFieldChange('email', value.target.value)}/><br />
+        <input
+          className="form-control" 
+          ref="message"
+          placeholder="Message"
+          value={this.state.fields.message.value}
+          onChange={value => this._onFieldChange('message', value.target.value)}/><br />
       </div>)
   },
 
