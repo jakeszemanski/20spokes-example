@@ -79,7 +79,7 @@ var ContactForm = React.createClass({
       let field = this.state.fields[key];
       fields[key] = field = this._setAndValidateField(key, field.value);
       if (!firstInvalidKey && field.invalid)
-        firstInvalidKey = key;
+        firstInvalidKey = field.name;
     });
 
     this.setState({ fields }, () => {
@@ -96,11 +96,14 @@ var ContactForm = React.createClass({
         return (
           <div key={key}>
             <input
-              className="form-control"
+              className={this.state.fields[key].invalid ? "form-invalid" : "form-invalid"}
+              type="text"
               placeholder={this.state.fields[key].name}
               value={this.state.fields[key].value}
               onChange={value => this._onFieldChange(key, value.target.value)}
-            /><br />
+            />
+            <p className="field-invalid">{this.state.fields[key].invalid ? this.state.fields[key].name + ` is required` : null}</p>
+            <br />
           </div>
         )
       }.bind(this))
@@ -111,14 +114,12 @@ var ContactForm = React.createClass({
     return (
       <div className="container">
         <div className="col-sm-12">
-          <div>
-          { this._renderInputFields()}
+          <div className="form-style-8">
+            <form className="form-group">
+            { this._renderInputFields()}
+            <input type="button" value="Submit" onClick={this.handleSubmit} />
+            </form>
           </div>
-          <form onSubmit={this.handleSubmit}>
-            <div className="actions">
-              <button className="btn btn-primary">Submit</button>
-            </div>
-          </form>
         </div>
       </div>
     )
