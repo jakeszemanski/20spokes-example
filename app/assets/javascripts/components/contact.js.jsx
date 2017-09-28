@@ -74,19 +74,22 @@ var ContactForm = React.createClass({
 
   _validateFields: function(callback) {
     let fields = {};
-    let firstInvalidKey = null;
+    let invalid = null;
     Object.keys(this.state.fields).forEach(key => {
       let field = this.state.fields[key];
       fields[key] = field = this._setAndValidateField(key, field.value);
-      if (!firstInvalidKey && field.invalid)
-        firstInvalidKey = field.name;
+      if (!invalid && field.invalid) {
+        invalid = field.name;
+      }
     });
 
     this.setState({ fields }, () => {
-      if (firstInvalidKey)
-        window.alert("Please enter " + firstInvalidKey);
-      else if (callback)
+      if (invalid) {
+        window.alert("Please enter fill out all fields");
+      }
+      else if (callback) {
         callback();
+      }
     });
   },
 
@@ -117,7 +120,7 @@ var ContactForm = React.createClass({
           <div className="form-style-8">
             <form className="form-group">
             { this._renderInputFields()}
-            <input type="button" value="Submit" onClick={this.handleSubmit} />
+            <button type="submit" onClick={this.handleSubmit}>Submit</button>
             </form>
           </div>
         </div>
