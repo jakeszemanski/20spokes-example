@@ -10,13 +10,11 @@ const initialState = {
 var ContactForm = React.createClass({ 
   displayName: "ContactForm",
   getInitialState: function() {
-    console.log("initialState", initialState)
     return initialState
   },
 
   handleSubmit: function(event){
     event.preventDefault();
-    console.warn('submit has been triggered', this.state);
     this._validateFields(function(){
       $.ajax({
       url: '/contact',
@@ -43,7 +41,6 @@ var ContactForm = React.createClass({
 
   _resetAllFields: function() {
     this.setState(initialState)
-    console.log("fields after clear", this.state)
   },
 
   _isPresent: function(value) {
@@ -116,13 +113,11 @@ var ContactForm = React.createClass({
   render: function(){
     return (
       <div className="container">
-        <div className="col-sm-12">
-          <div className="form-style-8">
-            <form className="form-group">
-            { this._renderInputFields()}
-            <button type="submit" onClick={this.handleSubmit}>Submit</button>
-            </form>
-          </div>
+        <div className="form-style-8">
+          <form className="form-group">
+          { this._renderInputFields()}
+          <button type="submit" onClick={this.handleSubmit}>Submit</button>
+          </form>
         </div>
       </div>
     )
